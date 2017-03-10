@@ -15,19 +15,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CustomersControl.xaml.cs">
-      <DependentUpon>CustomersControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)dbHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LoginModule.xaml.cs">
       <DependentUpon>LoginModule.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)CustomersControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="$(MSBuildThisFileDirectory)LoginModule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
