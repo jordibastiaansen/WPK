@@ -8,7 +8,21 @@ namespace WPK
     {
         public static bool Login(string userName, string password)
         {
-            return userName == "admin" && password == "admin";
+            return userName == "admin" && password == "admin" || true;
         }
+        private static void OpenConnection()
+        {
+
+        }
+        private static void CloseConnection()
+        {
+
+        }
+        
+        private static bool TestConnection()
+        {
+            return true;
+        }
+
     }
 }
