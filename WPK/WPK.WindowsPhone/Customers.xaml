@@ -9,17 +9,17 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Button Content="Zoek" HorizontalAlignment="Left" Margin="281,0,0,0" VerticalAlignment="Top" Height="57" Width="70"/>
-        <TextBox HorizontalAlignment="Left" Margin="55,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" Width="221" PlaceholderText="Voer zoekterm in..."/>
-        <!--<ListBox x:Name="mylistbox" Margin="10,53,10,10" SelectionChanged="Selectionchanged_Eventhandler_of_Listbox">
+        <Button x:Name="btnSearch" Content="Zoek" HorizontalAlignment="Left" Margin="281,0,0,0" VerticalAlignment="Top" Height="57" Width="70" Click="btnSearch_Click"/>
+        <TextBox x:Name="txtSearchBar" HorizontalAlignment="Left" Margin="55,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" Width="221" PlaceholderText="Voer zoekterm in..."/>
+        <ListBox x:Name="mylistbox" Margin="10,53,10,10" RequestedTheme="Dark">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="80" VerticalAlignment="Top">
-                        <TextBlock x:Name="nameblock" Text="{Binding name}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="57" Width="236" FontSize="36" Margin="10,10,0,0" />
+                    <Grid Height="80" VerticalAlignment="Top" RequestedTheme="Dark">
+                        <TextBlock x:Name="nameblock" Text="{Binding name}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="57" Width="236" FontSize="36" Margin="10,10,0,0" RequestedTheme="Dark" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>-->
+        </ListBox>
 
     </Grid>
 </Page>
