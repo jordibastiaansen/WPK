@@ -22,9 +22,19 @@ namespace WPK
     /// </summary>
     public sealed partial class Customers : Page
     {
+        private CustomerInfo[] cusList;
+
         public Customers()
         {
             this.InitializeComponent();
+            cusList = dbHandler.GetCustomers();
+            mylistbox.ItemsSource = cusList;
+        }
+
+        private void SearchList(string searchquery)
+        {
+            //searchquery = "floris";
+            mylistbox.ItemsSource = cusList.Where(w => w.name.ToLower().Contains(searchquery));
         }
 
         /// <summary>
@@ -34,6 +44,18 @@ namespace WPK
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtSearchBar.Text != "")
+            {
+                SearchList(txtSearchBar.Text);
+            }
+            else
+            {
+                mylistbox.ItemsSource = cusList;
+            }
         }
     }
 }

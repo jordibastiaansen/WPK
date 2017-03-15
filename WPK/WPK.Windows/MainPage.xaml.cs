@@ -30,7 +30,6 @@ namespace WPK
         private void LoginModule_LoginCompleted(object sender, EventArgs e)
         {
             Debug.WriteLine("pc login completed");
-            this.Frame.Navigate(typeof(Customers));
         }
     }
 }
