@@ -24,7 +24,6 @@ namespace WPK
         {
             return true;
         }
-
         public static CustomerInfo[] GetCustomers()
         {
             CustomerInfo[] list = new CustomerInfo[10];
@@ -40,6 +39,5 @@ namespace WPK
             list[9] = new CustomerInfo() { adress = "Schoutstraat 17a, 4204BC, Gorinchem, Nederland", name = "Myar", telephone = "0275-576643" };
             return list;
         }
-
     }
 }
