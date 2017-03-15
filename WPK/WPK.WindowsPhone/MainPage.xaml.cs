@@ -49,7 +49,7 @@ namespace WPK
         private void LoginModule_LoginCompleted(object sender, EventArgs e)
         {
             Debug.WriteLine("phone login completed");
-            Frame.Navigate(typeof(Customers));
+            Frame.Navigate(typeof(CustomerDetails));
         }
     }
 }
