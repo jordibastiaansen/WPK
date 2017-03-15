@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Diagnostics;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -33,7 +34,6 @@ namespace WPK
 
         private void SearchList(string searchquery)
         {
-            //searchquery = "floris";
             mylistbox.ItemsSource = cusList.Where(w => w.name.ToLower().Contains(searchquery));
         }
 
@@ -56,6 +56,13 @@ namespace WPK
             {
                 mylistbox.ItemsSource = cusList;
             }
+        }
+
+        private void OpenCustomer(object sender, SelectionChangedEventArgs e)
+        {
+            CustomerInfo selectedInfo = (sender as ListBox).SelectedItem as CustomerInfo;
+            Debug.WriteLine("Tapped a customer.");
+            Frame.Navigate(typeof(CustomerDetails), selectedInfo);
         }
     }
 }

@@ -29,13 +29,12 @@ namespace WPK
     /// </summary>
     public sealed partial class CustomerDetails : Page
     {
+        private CustomerInfo info;
         public CustomerDetails()
-        {
-
+        { 
             this.InitializeComponent();
             test();
            // PhoneCallManager.ShowPhoneCallUI("06-12345678", "test");
-
         }
 
         /// <summary>
@@ -43,9 +42,12 @@ namespace WPK
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
+        /// 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            info = (CustomerInfo)e.Parameter;
         }
+
         public async void test()
         {
             Geolocator geolocator = new Geolocator();
@@ -78,8 +80,6 @@ namespace WPK
             MapControl.SetLocation(curLoc, currentPosition.Coordinate.Point);
             MapControl.SetNormalizedAnchorPoint(curLoc, new Point(0.5, 0.5));
             mapview.Children.Add(curLoc);
-
-               
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
