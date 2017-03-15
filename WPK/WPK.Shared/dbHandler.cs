@@ -10,7 +10,19 @@ namespace WPK
         {
             return userName == "admin" && password == "admin" || true;
         }
+        private static void OpenConnection()
+        {
 
+        }
+        private static void CloseConnection()
+        {
+
+        }
+        
+        private static bool TestConnection()
+        {
+            return true;
+        }
         public static CustomerInfo[] GetCustomers()
         {
             CustomerInfo[] list = new CustomerInfo[10];
