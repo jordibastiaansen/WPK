@@ -13,16 +13,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
-
 namespace WPK
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class Customers : Page
     {
-        private CustomerInfo[] cusList;
+        private List<CustomerInfo> cusList;
 
         public Customers()
         {
@@ -33,15 +28,9 @@ namespace WPK
 
         private void SearchList(string searchquery)
         {
-            //searchquery = "floris";
-            mylistbox.ItemsSource = cusList.Where(w => w.name.ToLower().Contains(searchquery));
+            mylistbox.ItemsSource = cusList.Where(w => w.Name.ToLower().Contains(searchquery.ToLower()));
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
@@ -49,13 +38,14 @@ namespace WPK
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             if (txtSearchBar.Text != "")
-            {
                 SearchList(txtSearchBar.Text);
-            }
             else
-            {
                 mylistbox.ItemsSource = cusList;
-            }
+        }
+        private void OpenCustomer(object sender, SelectionChangedEventArgs e)
+        {
+            CustomerInfo selectedInfo = (sender as ListBox).SelectedItem as CustomerInfo;
+            Frame.Navigate(typeof(CustomerDetails), selectedInfo);
         }
     }
 }

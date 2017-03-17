@@ -8,7 +8,7 @@
     mc:Ignorable="d">
 
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Image Margin="0" VerticalAlignment="Top" Source="Assets/Logo.png" Width="100"/>
+        <Image Source="Assets/WPK-logo.png" Height="155" VerticalAlignment="Top" Margin="0,-30,0,0"/>
         <TextBlock HorizontalAlignment="Left" Margin="55,140,0,0" TextWrapping="Wrap" Text="Gebruikers naam:" VerticalAlignment="Top" Height="15" Width="141"/>
         <TextBox x:Name="txt_UserName" Margin="55,160,55,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" PlaceholderText="gebruikersnaam"/>
         <TextBlock HorizontalAlignment="Left" Margin="55,221,0,0" TextWrapping="Wrap" Text="Wachtwoord:" VerticalAlignment="Top"/>

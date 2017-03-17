@@ -20,33 +20,24 @@ using Windows.UI;
 using System.Diagnostics;
 using Windows.UI.Xaml.Shapes;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
-
 namespace WPK
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class CustomerDetails : Page
     {
+        CustomerInfo info;
+        Geopoint point;
         public CustomerDetails()
         {
-
             this.InitializeComponent();
-            test();
-           // PhoneCallManager.ShowPhoneCallUI("06-12345678", "test");
-
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            info = (CustomerInfo)e.Parameter;
+            info = dbHandler.GetCustomers()[0];
+            InitLocation();
         }
-        public async void test()
+        public async void InitLocation()
         {
             Geolocator geolocator = new Geolocator();
             Geoposition currentPosition;
@@ -59,10 +50,11 @@ namespace WPK
 
             MapIcon mapIcon1 = new MapIcon();
             mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            mapIcon1.Title = "wpk";
+            mapIcon1.Title = info.Name;
             mapIcon1.ZIndex = 0;
             result = await findloc;
             startPoint = result.Locations[0].Point;
+            point = startPoint;
             mapIcon1.Location = startPoint;
             mapview.MapElements.Add(mapIcon1);
             currentPosition = await x;
@@ -70,7 +62,7 @@ namespace WPK
             mapview.Center = currentPosition.Coordinate.Point;
             mapview.ZoomLevel = 10;
 
-            Ellipse curLoc =  new Ellipse();
+            Ellipse curLoc = new Ellipse();
             curLoc.Width = 20;
             curLoc.Height = 20;
             curLoc.Stroke = new SolidColorBrush(Colors.DarkCyan);
@@ -78,13 +70,24 @@ namespace WPK
             MapControl.SetLocation(curLoc, currentPosition.Coordinate.Point);
             MapControl.SetNormalizedAnchorPoint(curLoc, new Point(0.5, 0.5));
             mapview.Children.Add(curLoc);
-
-               
+        }
+        private void TextBlock_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            PhoneCallManager.ShowPhoneCallUI(info.PhoneNumber, info.Name);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void lbl_adress_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            test();
+            Navigate(point, info.Name);
+        }
+        private async void Navigate(Geopoint point, string name)
+        {
+            Uri driveToUri = new Uri(String.Format(
+     "ms-drive-to:?destination.latitude={0}&destination.longitude={1}&destination.name={2}",
+     point.Position.Latitude,
+     point.Position.Longitude,
+     name));
+           await Windows.System.Launcher.LaunchUriAsync(driveToUri);
         }
     }
 }
