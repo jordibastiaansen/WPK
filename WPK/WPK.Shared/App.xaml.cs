@@ -1,12 +1,15 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -15,6 +18,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using System.Diagnostics;
+using Windows.Phone.UI.Input;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -28,6 +33,7 @@ namespace WPK
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
 #endif
+        public static string dbPath = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "customers.sqlite"));   
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -37,7 +43,38 @@ namespace WPK
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            if (!CheckFileExists("customers.sqlite").Result)
+            {
+                using (SQLiteConnection db = new SQLiteConnection(dbPath))
+                {
+                    db.CreateTable<CustomerInfo>();
+                }
+            } 
+                        HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+       }
+
+        void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            if (rootFrame != null && rootFrame.CanGoBack)
+            {
+                e.Handled = true;
+                rootFrame.GoBack();
+            }
         }
+        private async Task<bool> CheckFileExists(string fileName)
+        {
+            try
+            {
+                await Windows.Storage.ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
+                return true;
+            }
+            catch
+            {
+            }
+            return false;
+        }  
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points

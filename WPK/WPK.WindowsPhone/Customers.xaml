@@ -11,7 +11,7 @@
     <Grid>
         <Button x:Name="btnSearch" Content="Zoek" HorizontalAlignment="Left" Margin="281,0,0,0" VerticalAlignment="Top" Height="57" Width="70" Click="btnSearch_Click"/>
         <TextBox x:Name="txtSearchBar" HorizontalAlignment="Left" Margin="55,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" Width="221" PlaceholderText="Voer zoekterm in..."/>
-        <ListBox x:Name="mylistbox" Margin="10,53,10,10" RequestedTheme="Dark">
+        <ListBox x:Name="mylistbox" Margin="10,53,10,10" RequestedTheme="Dark" SelectionChanged="OpenCustomer">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="80" VerticalAlignment="Top" RequestedTheme="Dark">
