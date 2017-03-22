@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -17,7 +9,6 @@ using Windows.Devices.Geolocation;
 using Windows.Services.Maps;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI;
-using System.Diagnostics;
 using Windows.UI.Xaml.Shapes;
 
 namespace WPK
@@ -29,39 +20,62 @@ namespace WPK
         public CustomerDetails()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
         }
 
+        /// <summary>
+        /// declared the datacontent of the customers.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+
             info = (CustomerInfo)e.Parameter;
-            info = dbHandler.GetCustomers()[0];
             InitLocation();
+            lbl_Name.DataContext = info;
+            lbl_Phone.DataContext = info;
+            lbl_adress.DataContext = info;
         }
+        /// <summary>
+        /// init the locations the phone location and customerlocation.
+        /// </summary>
         public async void InitLocation()
         {
             Geolocator geolocator = new Geolocator();
             Geoposition currentPosition;
-            IAsyncOperation<Geoposition> x = geolocator.GetGeopositionAsync();
+            IAsyncOperation<Geoposition> async_CurLoc = geolocator.GetGeopositionAsync();
             IAsyncOperation<MapLocationFinderResult> findloc = MapLocationFinder.FindLocationsAsync(
-              "Aaksterlaan 6, 2691 KP 's-Gravenzande nederland", new Geopoint(new BasicGeoposition()));
+              info.FullAdress, new Geopoint(new BasicGeoposition()));
 
             Geopoint startPoint;
             MapLocationFinderResult result;
-
-            MapIcon mapIcon1 = new MapIcon();
-            mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            mapIcon1.Title = info.Name;
-            mapIcon1.ZIndex = 0;
+            // icon for the customer.
+            MapIcon cusIcon = new MapIcon();
+            cusIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            cusIcon.Title = info.Name;
+            cusIcon.ZIndex = -100;
             result = await findloc;
             startPoint = result.Locations[0].Point;
             point = startPoint;
-            mapIcon1.Location = startPoint;
-            mapview.MapElements.Add(mapIcon1);
-            currentPosition = await x;
+            cusIcon.Location = startPoint;
+            mapview.MapElements.Add(cusIcon);
+            currentPosition = await async_CurLoc;
 
-            mapview.Center = currentPosition.Coordinate.Point;
+            //ellipse  for  customer location.
+            Ellipse cusLoc = new Ellipse();
+            cusLoc.Width = 20;
+            cusLoc.Height = 20;
+            cusLoc.Stroke = new SolidColorBrush(Colors.Black);
+            cusLoc.StrokeThickness = 3;
+            MapControl.SetLocation(cusLoc, startPoint);
+            MapControl.SetNormalizedAnchorPoint(cusLoc, new Point(0.5, 0.5));
+            mapview.Children.Add(cusLoc);
+
+            // zoom level and center
+            mapview.Center = startPoint;
             mapview.ZoomLevel = 10;
-
+            
+            //ellipse for current location.
             Ellipse curLoc = new Ellipse();
             curLoc.Width = 20;
             curLoc.Height = 20;
@@ -71,15 +85,21 @@ namespace WPK
             MapControl.SetNormalizedAnchorPoint(curLoc, new Point(0.5, 0.5));
             mapview.Children.Add(curLoc);
         }
-        private void TextBlock_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            PhoneCallManager.ShowPhoneCallUI(info.PhoneNumber, info.Name);
-        }
-
+        /// <summary>
+        /// event is called when lbl_adress is double tapped
+        /// is give a promp to open a navigation app
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lbl_adress_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             Navigate(point, info.Name);
         }
+        /// <summary>
+        /// calls navigation app with de parameters.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="name"></param>
         private async void Navigate(Geopoint point, string name)
         {
             Uri driveToUri = new Uri(String.Format(
@@ -88,6 +108,15 @@ namespace WPK
      point.Position.Longitude,
      name));
            await Windows.System.Launcher.LaunchUriAsync(driveToUri);
+        }
+        /// <summary>
+        /// events is called when lbl_phone is tapped
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lbl_Phone_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            PhoneCallManager.ShowPhoneCallUI(info.FormatPhoneNumber, info.Name);
         }
     }
 }

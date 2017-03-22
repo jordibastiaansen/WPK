@@ -5,21 +5,24 @@
     xmlns:local="using:WPK"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
+    <Page.Background>
+        <ImageBrush Stretch="UniformToFill" ImageSource="Assets/background.jpg"/>
+    </Page.Background>
 
     <Grid>
-        <Button x:Name="btnSearch" Content="Zoek" HorizontalAlignment="Left" Margin="281,0,0,0" VerticalAlignment="Top" Height="57" Width="70" Click="btnSearch_Click"/>
-        <TextBox x:Name="txtSearchBar" HorizontalAlignment="Left" Margin="55,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" Width="221" PlaceholderText="Voer zoekterm in..."/>
-        <ListBox x:Name="mylistbox" Margin="10,53,10,10" RequestedTheme="Dark" SelectionChanged="OpenCustomer">
+        <Button x:Name="btnSearch" Content="Zoek" HorizontalAlignment="Stretch" Margin="281,0,10,0" VerticalAlignment="Top" Height="57" Width="70" Click="btnSearch_Click" BorderBrush="#FF7E7E7E" Foreground="#FF464646"/>
+        <TextBox x:Name="txtSearchBar" Margin="55,10,124,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" PlaceholderText="Voer zoekterm in..." BorderBrush="Transparent" Background="Transparent"/>
+        <ListBox x:Name="mylistbox" Margin="10,53,10,10" RequestedTheme="Dark" SelectionChanged="OpenCustomer" BorderBrush="Transparent" Background="Transparent" Tapped="mylistbox_Tapped">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="80" VerticalAlignment="Top" RequestedTheme="Dark">
-                        <TextBlock x:Name="nameblock" Text="{Binding name}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="57" Width="236" FontSize="36" Margin="10,10,0,0" RequestedTheme="Dark" />
+                    <Grid VerticalAlignment="Top" RequestedTheme="Dark">
+                        <TextBlock x:Name="nameblock" Text="{Binding Name}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36" Margin="10,10,0,0" RequestedTheme="Dark" Foreground="Black" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <TextBlock x:Name="lbl_NoResult" TextWrapping="Wrap" Text="Geen zoekresultaten." Margin="11,189,11,393" Foreground="Gray" FontSize="24" TextAlignment="Center" Visibility="Collapsed"/>
 
     </Grid>
 </Page>
