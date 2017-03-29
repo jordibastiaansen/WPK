@@ -60,6 +60,10 @@ namespace WPK
                 e.Handled = true;
                 rootFrame.GoBack();
             }
+            else if (rootFrame != null && !rootFrame.CanGoBack)
+            {
+                this.Exit();
+            }
         }
 #endif
 #if WINDOWS_PHONE_APP
@@ -106,7 +110,7 @@ namespace WPK
                 rootFrame = new Frame();
 
                 // TODO: change this value to a cache size that is appropriate for your application
-                rootFrame.CacheSize = 1;
+                rootFrame.CacheSize = 3;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -155,7 +159,7 @@ namespace WPK
         /// <param name="e">Details about the navigation event.</param>
         private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
         {
-            var rootFrame = sender as Frame;
+            Frame rootFrame = sender as Frame;
             rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
             rootFrame.Navigated -= this.RootFrame_FirstNavigated;
         }
@@ -170,9 +174,12 @@ namespace WPK
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
+            SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
 
-            // TODO: Save application state and stop any background activity
+            Frame frame =(Frame) Window.Current.Content;
+            frame.Navigate(typeof(MainPage));
+            frame.BackStack.Clear();
+
             deferral.Complete();
         }
     }

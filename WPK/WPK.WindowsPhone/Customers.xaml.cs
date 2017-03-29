@@ -4,7 +4,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-using System.Diagnostics;
 namespace WPK
 {
     public sealed partial class Customers : Page
@@ -15,8 +14,8 @@ namespace WPK
         {
             this.InitializeComponent();
             cusList = dbHandler.GetCustomers();
-            mylistbox.ItemsSource = cusList.ToArray();
-            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
+            mylistbox.ItemsSource = cusList;
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Required;
         }
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace WPK
         {
             IEnumerable<CustomerInfo> searchResult = cusList.Where(w => w.Name.ToLower().Contains(searchquery.ToLower()));
             mylistbox.ItemsSource = searchResult;
-            lbl_NoResult.Visibility =(Windows.UI.Xaml.Visibility) (searchResult.Count() <= 0 ? 0 : 1);
+            lbl_NoResult.Visibility =(searchResult.Count() <= 0 ? Visibility.Visible : Visibility.Collapsed);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -52,7 +51,7 @@ namespace WPK
         private void OpenCustomer(object sender, SelectionChangedEventArgs e)
         {
             clicked = true;
-            CustomerInfo selectedInfo = (sender as ListBox).SelectedItem as CustomerInfo;
+            CustomerInfo selectedInfo = (CustomerInfo)((ListBox)sender).SelectedItem;
             if (selectedInfo != null)
             {
                 Frame.Navigate(typeof(CustomerDetails), selectedInfo);
@@ -68,7 +67,7 @@ namespace WPK
         {
             if (!clicked)
             {
-                CustomerInfo selectedInfo = (sender as ListBox).SelectedItem as CustomerInfo;
+                CustomerInfo selectedInfo = (CustomerInfo)((ListBox)sender).SelectedItem;
                 if (selectedInfo != null)
                     Frame.Navigate(typeof(CustomerDetails), selectedInfo);
             }

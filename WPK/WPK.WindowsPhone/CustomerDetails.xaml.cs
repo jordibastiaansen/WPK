@@ -41,25 +41,27 @@ namespace WPK
         /// </summary>
         public async void InitLocation()
         {
-            Geolocator geolocator = new Geolocator();
-            Geoposition currentPosition;
-            IAsyncOperation<Geoposition> async_CurLoc = geolocator.GetGeopositionAsync();
-            IAsyncOperation<MapLocationFinderResult> findloc = MapLocationFinder.FindLocationsAsync(
-              info.FullAdress, new Geopoint(new BasicGeoposition()));
-
             Geopoint startPoint;
-            MapLocationFinderResult result;
+            Geolocator geolocator = new Geolocator();
+
+            Geoposition currentPosition = await geolocator.GetGeopositionAsync();
+            MapLocationFinderResult result = await MapLocationFinder.FindLocationsAsync(
+              info.FullAdress, currentPosition.Coordinate.Point);
+
+            if (result.Locations.Count <= 0)
+                result = await MapLocationFinder.FindLocationsAsync(info.HalfAdress, currentPosition.Coordinate.Point);
+
+            startPoint = result.Locations[0].Point;
+            point = startPoint;
+
             // icon for the customer.
             MapIcon cusIcon = new MapIcon();
             cusIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
             cusIcon.Title = info.Name;
             cusIcon.ZIndex = -100;
-            result = await findloc;
-            startPoint = result.Locations[0].Point;
-            point = startPoint;
             cusIcon.Location = startPoint;
+
             mapview.MapElements.Add(cusIcon);
-            currentPosition = await async_CurLoc;
 
             //ellipse  for  customer location.
             Ellipse cusLoc = new Ellipse();
@@ -104,9 +106,8 @@ namespace WPK
         {
             Uri driveToUri = new Uri(String.Format(
      "ms-drive-to:?destination.latitude={0}&destination.longitude={1}&destination.name={2}",
-     point.Position.Latitude,
-     point.Position.Longitude,
-     name));
+     point.Position.Latitude, point.Position.Longitude, name));
+
            await Windows.System.Launcher.LaunchUriAsync(driveToUri);
         }
         /// <summary>
