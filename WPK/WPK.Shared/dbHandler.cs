@@ -13,8 +13,10 @@ namespace WPK
         /// <returns></returns>
         public static bool Login(string userName, string password)
         {
-
-            return userName == "Buitendienst" && password == "$(@!PM" || true;
+#if DEBUG
+            return true;
+#endif
+            return userName == "Buitendienst" && password == "$(@!PM";
         }
 
         /// <summary>
@@ -24,7 +26,7 @@ namespace WPK
         /// <returns></returns>
         public static List<CustomerInfo> getCustomersFromCountry(string country)
         {
-            using (var dbcon = new SQLiteConnection(App.dbPath))
+            using (SQLiteConnection dbcon = new SQLiteConnection(App.dbPath))
             {
                 if (country.ToLower() == "nl")
                 {
@@ -41,7 +43,7 @@ namespace WPK
         /// <returns></returns>
         public static List<CustomerInfo> GetCustomers()
         {
-            using (var dbcon = new SQLiteConnection(App.dbPath))
+            using (SQLiteConnection dbcon = new SQLiteConnection(App.dbPath))
             {
                 return dbcon.Query<CustomerInfo>("Select * from CustomerInfo order by Name");
             }
